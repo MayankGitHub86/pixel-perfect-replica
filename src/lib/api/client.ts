@@ -1,7 +1,7 @@
 // Typed HTTP client for the RecruitFlow backend. The only configuration is the
 // public VITE_API_BASE_URL; no secrets ever live in the browser.
 
-export const API_BASE_URL: string = (import.meta.env.VITE_API_BASE_URL ?? "").replace(/\/$/, "");
+export const API_BASE_URL: string = ((import.meta.env["VITE_API_BASE_URL"] as string | undefined) ?? "").replace(/\/$/, "");
 
 export const isApiConfigured = () => API_BASE_URL.length > 0;
 
@@ -53,8 +53,7 @@ export async function apiRequest<T>(
     res = await fetch(url, {
       method: opts.method ?? "GET",
       credentials: "include", // session cookie issued by the backend
-      headers: opts.body ? { "Content-Type": "application/json" } : undefined,
-      body: opts.body ? JSON.stringify(opts.body) : undefined,
+      ...(opts.body !== undefined ? { headers: { "Content-Type": "application/json" }, body: JSON.stringify(opts.body) } : {}),
     });
   } catch {
     throw new ApiError(0, `Could not reach ${API_BASE_URL}.`);

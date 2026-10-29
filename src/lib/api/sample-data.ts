@@ -21,7 +21,7 @@ const rand = () => {
   seed = (seed * 16807) % 2147483647;
   return (seed - 1) / 2147483646;
 };
-const pick = <T,>(arr: readonly T[]) => arr[Math.floor(rand() * arr.length)];
+const pick = <T,>(arr: readonly T[]): T => arr[Math.floor(rand() * arr.length)] as T;
 
 const FIRST = ["Asha", "Rohan", "Meera", "Kabir", "Ishita", "Dev", "Nina", "Arjun", "Tara", "Vikram", "Leela", "Sam", "Priya", "Neel", "Zoya", "Omar"];
 const LAST = ["Sample", "Testwell", "Demo", "Placeholder", "Mockford", "Synthetic"];

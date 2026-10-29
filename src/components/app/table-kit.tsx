@@ -84,8 +84,9 @@ export const fmtDate = (d: string | null | undefined, time = false) =>
   d ? new Date(d).toLocaleString(undefined, { day: "2-digit", month: "short", year: "numeric", ...(time ? { hour: "2-digit", minute: "2-digit" } : {}) }) : "—";
 
 export function toCsv(rows: Record<string, unknown>[]) {
-  if (!rows.length) return "";
-  const keys = Object.keys(rows[0]);
+  const first = rows[0];
+  if (!first) return "";
+  const keys = Object.keys(first);
   const esc = (v: unknown) => `"${String(Array.isArray(v) ? v.join("; ") : v ?? "").replace(/"/g, '""')}"`;
   return [keys.join(","), ...rows.map((r) => keys.map((k) => esc(r[k])).join(","))].join("\n");
 }

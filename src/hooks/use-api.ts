@@ -83,10 +83,10 @@ export function useExcelAction(kind: "test" | "run") {
   const { api } = useDataMode();
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: () => (kind === "test" ? api.excelTest() : api.excelRun()),
+    mutationFn: (): Promise<{ ok?: boolean; message?: string; queued?: number }> => (kind === "test" ? api.excelTest() : api.excelRun()),
     onSuccess: (r) => {
       qc.invalidateQueries();
-      toast.success(kind === "test" ? ("message" in r ? r.message : "Connection OK") : `Backend queued ${"queued" in r ? r.queued : 0} rows`);
+      toast.success(kind === "test" ? (r.message ?? "Connection OK") : `Backend queued ${r.queued ?? 0} rows`);
     },
     onError,
   });

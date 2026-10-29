@@ -46,8 +46,8 @@ export function CandidatesPage({ initialSearch }: { initialSearch: string }) {
           <FilterSelect label="Dates" value={f.since} onChange={setFilter("since")} options={[{ value: "7", label: "Last 7 days" }, { value: "14", label: "Last 14 days" }, { value: "30", label: "Last 30 days" }]} />
           <FilterSelect label="Roles" value={f.appliedRole} onChange={setFilter("appliedRole")} options={opt(ROLES)} />
           <FilterSelect label="Degrees" value={f.degree} onChange={setFilter("degree")} options={opt(DEGREES)} />
-          <FilterSelect label="Processing" value={f.processingStatus} onChange={setFilter("processingStatus")} options={[["new","New"],["processing","Processing"],["processed","Processed"],["needs_review","Needs review"],["failed","Failed"]].map(([value,label])=>({value,label}))} />
-          <FilterSelect label="Interview" value={f.interviewStatus} onChange={setFilter("interviewStatus")} options={[["not_scheduled","Not scheduled"],["scheduled","Scheduled"],["completed","Completed"],["no_show","No show"]].map(([value,label])=>({value,label}))} />
+          <FilterSelect label="Processing" value={f.processingStatus} onChange={setFilter("processingStatus")} options={[["new","New"],["processing","Processing"],["processed","Processed"],["needs_review","Needs review"],["failed","Failed"]].map(([value,label])=>({value: value!, label: label!}))} />
+          <FilterSelect label="Interview" value={f.interviewStatus} onChange={setFilter("interviewStatus")} options={[["not_scheduled","Not scheduled"],["scheduled","Scheduled"],["completed","Completed"],["no_show","No show"]].map(([value,label])=>({value: value!, label: label!}))} />
         </div>
         {error ? <ErrorState error={error} onRetry={refetch} /> : isLoading ? <LoadingRows /> : !items.length ? (
           <EmptyState title="No candidates match" description="Adjust search or filters. New CVs appear after the backend processes incoming email." />
