@@ -41,7 +41,7 @@ function listLocal<T extends object>(rows: T[], q: ListQuery, searchKeys: (keyof
     if (v === undefined || v === "" || v === "all") continue;
     if (k === "since") {
       const min = Date.now() - Number(v) * 86_400_000;
-      out = out.filter((r) => new Date(String((r as Record<string, unknown>).receivedAt ?? (r as Record<string, unknown>).at)).getTime() >= min);
+      out = out.filter((r) => new Date(String((r as Record<string, unknown>)["receivedAt"] ?? (r as Record<string, unknown>)["at"])).getTime() >= min);
       continue;
     }
     out = out.filter((r) => String((r as Record<string, unknown>)[k]) === String(v));

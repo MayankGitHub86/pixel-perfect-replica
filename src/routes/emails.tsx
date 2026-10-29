@@ -38,7 +38,7 @@ function EmailsPage() {
         <div className="flex flex-col gap-2 border-b p-3 md:flex-row md:items-center md:justify-between">
           <Tabs value={status} onValueChange={(v) => { setStatus(v); setPage(1); }}>
             <TabsList className="flex-wrap">
-              {[["all", "All"], ["new", "New"], ["processing", "Processing"], ["processed", "Processed"], ["needs_review", "Needs Review"], ["failed", "Failed"]].map(([v, l]) => <TabsTrigger key={v} value={v}>{l}</TabsTrigger>)}
+              {[["all", "All"], ["new", "New"], ["processing", "Processing"], ["processed", "Processed"], ["needs_review", "Needs Review"], ["failed", "Failed"]].map(([v, l]) => <TabsTrigger key={v} value={v!}>{l}</TabsTrigger>)}
             </TabsList>
           </Tabs>
           <SearchInput value={search} onChange={(v) => { setSearch(v); setPage(1); }} placeholder="Sender or subject" />

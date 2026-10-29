@@ -4,7 +4,7 @@ import { CandidatesPage } from "@/components/app/candidates-page";
 type Search = { q?: string };
 
 export const Route = createFileRoute("/candidates/")({
-  validateSearch: (s: Record<string, unknown>): Search => (typeof s.q === "string" && s.q ? { q: s.q } : {}),
+  validateSearch: (s: Record<string, unknown>): Search => (typeof s["q"] === "string" && s["q"] ? { q: s["q"] } : {}),
   head: () => ({
     meta: [
       { title: "Candidates · RecruitFlow" },
