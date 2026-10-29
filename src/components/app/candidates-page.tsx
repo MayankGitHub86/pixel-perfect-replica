@@ -77,7 +77,7 @@ export function CandidatesPage({ initialSearch }: { initialSearch: string }) {
                 {items.map((c) => (
                   <TableRow key={c.id} data-state={selected.has(c.id) ? "selected" : undefined}>
                     <TableCell><Checkbox checked={selected.has(c.id)} onCheckedChange={(v) => setSelected((s) => { const n = new Set(s); v ? n.add(c.id) : n.delete(c.id); return n; })} aria-label={`Select ${c.id}`} /></TableCell>
-                    <TableCell className="font-mono text-xs"><div className="flex items-center gap-1.5">{c.id}{c.isSample && <SampleTag />}</div></TableCell>
+                    <TableCell className="whitespace-nowrap font-mono text-xs"><div className="flex items-center gap-1.5">{c.id}{c.isSample && <SampleTag />}</div></TableCell>
                     <TableCell>
                       <p className="font-medium">{c.name ?? <Unknown />}</p>
                       <p className="text-xs text-muted-foreground">{c.email ?? "—"}</p>
@@ -86,7 +86,7 @@ export function CandidatesPage({ initialSearch }: { initialSearch: string }) {
                     <TableCell className="max-w-40 truncate text-xs">{c.college ?? <Unknown />}</TableCell>
                     <TableCell className="whitespace-nowrap text-xs">{c.degree ?? <Unknown />}</TableCell>
                     <TableCell className="text-xs tabular-nums">{c.graduationYear ?? <Unknown />}</TableCell>
-                    <TableCell><div className="flex max-w-48 flex-wrap gap-1">{c.skills.slice(0, 3).map((s) => <span key={s} className="rounded bg-muted px-1.5 py-0.5 text-[11px]">{s}</span>)}{c.skills.length > 3 && <span className="text-[11px] text-muted-foreground">+{c.skills.length - 3}</span>}</div></TableCell>
+                    <TableCell><div className="flex items-center gap-1 whitespace-nowrap">{c.skills.slice(0, 3).map((s) => <span key={s} className="rounded bg-muted px-1.5 py-0.5 text-[11px]">{s}</span>)}{c.skills.length > 3 && <span className="text-[11px] text-muted-foreground">+{c.skills.length - 3}</span>}</div></TableCell>
                     <TableCell className="text-xs tabular-nums">{c.experienceYears != null ? `${c.experienceYears}y` : <Unknown />}</TableCell>
                     <TableCell className="whitespace-nowrap text-xs">{c.appliedRole ?? <Unknown />}</TableCell>
                     <TableCell className="whitespace-nowrap text-xs">{fmtDate(c.receivedAt)}</TableCell>
