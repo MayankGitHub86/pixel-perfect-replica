@@ -10,11 +10,54 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ActivityRouteImport } from './routes/activity'
+import { Route as ApplicationsRouteImport } from './routes/applications'
+import { Route as EmailsRouteImport } from './routes/emails'
+import { Route as ExcelSyncRouteImport } from './routes/excel-sync'
+import { Route as JobsRouteImport } from './routes/jobs'
+import { Route as ReviewRouteImport } from './routes/review'
+import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as CandidatesIndexRouteImport } from './routes/candidates.index'
+import { Route as CandidatesIdRouteImport } from './routes/candidates.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ActivityRoute = ActivityRouteImport.update({
+  id: '/activity',
+  path: '/activity',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApplicationsRoute = ApplicationsRouteImport.update({
+  id: '/applications',
+  path: '/applications',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EmailsRoute = EmailsRouteImport.update({
+  id: '/emails',
+  path: '/emails',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ExcelSyncRoute = ExcelSyncRouteImport.update({
+  id: '/excel-sync',
+  path: '/excel-sync',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const JobsRoute = JobsRouteImport.update({
+  id: '/jobs',
+  path: '/jobs',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReviewRoute = ReviewRouteImport.update({
+  id: '/review',
+  path: '/review',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CandidatesIndexRoute = CandidatesIndexRouteImport.update({
@@ -22,30 +65,98 @@ const CandidatesIndexRoute = CandidatesIndexRouteImport.update({
   path: '/candidates/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CandidatesIdRoute = CandidatesIdRouteImport.update({
+  id: '/candidates/$id',
+  path: '/candidates/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/activity': typeof ActivityRoute
+  '/applications': typeof ApplicationsRoute
+  '/emails': typeof EmailsRoute
+  '/excel-sync': typeof ExcelSyncRoute
+  '/jobs': typeof JobsRoute
+  '/review': typeof ReviewRoute
+  '/settings': typeof SettingsRoute
+  '/candidates/$id': typeof CandidatesIdRoute
   '/candidates/': typeof CandidatesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/activity': typeof ActivityRoute
+  '/applications': typeof ApplicationsRoute
+  '/emails': typeof EmailsRoute
+  '/excel-sync': typeof ExcelSyncRoute
+  '/jobs': typeof JobsRoute
+  '/review': typeof ReviewRoute
+  '/settings': typeof SettingsRoute
+  '/candidates/$id': typeof CandidatesIdRoute
   '/candidates': typeof CandidatesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/activity': typeof ActivityRoute
+  '/applications': typeof ApplicationsRoute
+  '/emails': typeof EmailsRoute
+  '/excel-sync': typeof ExcelSyncRoute
+  '/jobs': typeof JobsRoute
+  '/review': typeof ReviewRoute
+  '/settings': typeof SettingsRoute
+  '/candidates/$id': typeof CandidatesIdRoute
   '/candidates/': typeof CandidatesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/candidates/'
+  fullPaths:
+    | '/'
+    | '/activity'
+    | '/applications'
+    | '/emails'
+    | '/excel-sync'
+    | '/jobs'
+    | '/review'
+    | '/settings'
+    | '/candidates/$id'
+    | '/candidates/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/candidates'
-  id: '__root__' | '/' | '/candidates/'
+  to:
+    | '/'
+    | '/activity'
+    | '/applications'
+    | '/emails'
+    | '/excel-sync'
+    | '/jobs'
+    | '/review'
+    | '/settings'
+    | '/candidates/$id'
+    | '/candidates'
+  id:
+    | '__root__'
+    | '/'
+    | '/activity'
+    | '/applications'
+    | '/emails'
+    | '/excel-sync'
+    | '/jobs'
+    | '/review'
+    | '/settings'
+    | '/candidates/$id'
+    | '/candidates/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ActivityRoute: typeof ActivityRoute
+  ApplicationsRoute: typeof ApplicationsRoute
+  EmailsRoute: typeof EmailsRoute
+  ExcelSyncRoute: typeof ExcelSyncRoute
+  JobsRoute: typeof JobsRoute
+  ReviewRoute: typeof ReviewRoute
+  SettingsRoute: typeof SettingsRoute
+  CandidatesIdRoute: typeof CandidatesIdRoute
   CandidatesIndexRoute: typeof CandidatesIndexRoute
 }
 
@@ -58,6 +169,55 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/activity': {
+      id: '/activity'
+      path: '/activity'
+      fullPath: '/activity'
+      preLoaderRoute: typeof ActivityRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/applications': {
+      id: '/applications'
+      path: '/applications'
+      fullPath: '/applications'
+      preLoaderRoute: typeof ApplicationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/emails': {
+      id: '/emails'
+      path: '/emails'
+      fullPath: '/emails'
+      preLoaderRoute: typeof EmailsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/excel-sync': {
+      id: '/excel-sync'
+      path: '/excel-sync'
+      fullPath: '/excel-sync'
+      preLoaderRoute: typeof ExcelSyncRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/jobs': {
+      id: '/jobs'
+      path: '/jobs'
+      fullPath: '/jobs'
+      preLoaderRoute: typeof JobsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/review': {
+      id: '/review'
+      path: '/review'
+      fullPath: '/review'
+      preLoaderRoute: typeof ReviewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/candidates/': {
       id: '/candidates/'
       path: '/candidates'
@@ -65,11 +225,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CandidatesIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/candidates/$id': {
+      id: '/candidates/$id'
+      path: '/candidates/$id'
+      fullPath: '/candidates/$id'
+      preLoaderRoute: typeof CandidatesIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ActivityRoute: ActivityRoute,
+  ApplicationsRoute: ApplicationsRoute,
+  EmailsRoute: EmailsRoute,
+  ExcelSyncRoute: ExcelSyncRoute,
+  JobsRoute: JobsRoute,
+  ReviewRoute: ReviewRoute,
+  SettingsRoute: SettingsRoute,
+  CandidatesIdRoute: CandidatesIdRoute,
   CandidatesIndexRoute: CandidatesIndexRoute,
 }
 export const routeTree = rootRouteImport
