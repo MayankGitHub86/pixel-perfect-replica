@@ -1,9 +1,9 @@
-import { createFileRoute, Outlet, useMatch } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { CandidatesPage } from "@/components/app/candidates-page";
 
 type Search = { q?: string };
 
-export const Route = createFileRoute("/candidates")({
+export const Route = createFileRoute("/candidates/")({
   validateSearch: (s: Record<string, unknown>): Search => (typeof s.q === "string" && s.q ? { q: s.q } : {}),
   head: () => ({
     meta: [
@@ -13,11 +13,10 @@ export const Route = createFileRoute("/candidates")({
       { property: "og:description", content: "Search, filter, and review candidate records extracted from CVs." },
     ],
   }),
-  component: CandidatesLayout,
+  component: CandidatesRoute,
 });
 
-function CandidatesLayout() {
-  const child = useMatch({ from: "/candidates/$id", shouldThrow: false });
+function CandidatesRoute() {
   const { q } = Route.useSearch();
-  return child ? <Outlet /> : <CandidatesPage initialSearch={q ?? ""} />;
+  return <CandidatesPage key={q ?? ""} initialSearch={q ?? ""} />;
 }
