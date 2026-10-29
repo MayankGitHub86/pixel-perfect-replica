@@ -99,7 +99,7 @@ function ConnectionPill() {
   const { mode } = useDataMode();
   const health = useHealth();
   const ms = useMicrosoftStatus();
-  if (mode === "sample") return <StatusBadge status="attention_required" className="hidden md:inline-flex" />;
+  if (mode === "sample") return <StatusBadge status="Sample mode" className="hidden md:inline-flex" />;
   if (!isApiConfigured()) return <span className="hidden text-xs text-muted-foreground md:inline">Backend not configured</span>;
   return (
     <div className="hidden items-center gap-2 md:flex">
