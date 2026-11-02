@@ -63,7 +63,7 @@ export async function apiRequest<T>(
     let message = res.statusText;
     try {
       const data = await res.json();
-      message = data.message ?? data.error ?? message;
+      message = data.message ?? (typeof data.error === "object" ? data.error?.message : data.error) ?? message;
     } catch {
       /* non-JSON error body */
     }

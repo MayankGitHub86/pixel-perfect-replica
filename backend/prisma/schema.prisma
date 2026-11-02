@@ -1,0 +1,193 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model MailboxConnection {
+  id             String         @id @default(uuid())
+  userId         String         // Reference to user or tenant
+  emailAddress   String         @unique
+  accessToken    String         // Encrypted / securely managed
+  refreshToken   String         // Encrypted
+  tokenExpiresAt DateTime
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+
+  emails         EmailMessage[]
+
+  @@index([emailAddress])
+}
+
+model EmailMessage {
+  id            String         @id @default(uuid())
+  mailboxId     String?
+  mailbox       MailboxConnection? @relation(fields: [mailboxId], references: [id], onDelete: Cascade)
+  messageId     String         @unique // Outlook message ID (idempotency key)
+  subject       String
+  fromEmail     String
+  receivedAt    DateTime       @default(now())
+  processedAt   DateTime?
+  status        String         @default("new") // new, processing, processed, needs_review, failed
+  error         String?
+  candidateId   String?
+  applicationId String?
+  history       Json?          // Processing history steps: { at, step, status }[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  attachments   Attachment[]
+  processingJob ProcessingJob?
+
+  @@index([mailboxId])
+  @@index([fromEmail])
+  @@index([status])
+  @@index([receivedAt])
+}
+
+model Attachment {
+  id          String        @id @default(uuid())
+  emailId     String?
+  email       EmailMessage? @relation(fields: [emailId], references: [id], onDelete: Cascade)
+  filename    String
+  mimeType    String
+  sizeBytes   Int
+  storageKey  String        // File storage key or local path
+  status      String        @default("new") // new, processing, error, done
+  candidateId String?
+  candidate   Candidate?    @relation(fields: [candidateId], references: [id], onDelete: SetNull)
+  createdAt   DateTime      @default(now())
+  processedAt DateTime?
+
+  @@index([emailId])
+  @@index([candidateId])
+  @@index([status])
+}
+
+model Candidate {
+  id               String         @id @default(uuid())
+  name             String?
+  email            String?        @unique
+  phone            String?
+  location         String?
+  college          String?
+  degree           String?
+  graduationYear   Int?
+  skills           String[]       @default([])
+  experienceYears  Float?
+  appliedRole      String?
+  processingStatus String         @default("new") // new, processing, processed, needs_review, failed
+  interviewStatus  String         @default("not_scheduled") // not_scheduled, scheduled, completed, no_show
+  resumeRef        String?
+  resumeFileName   String?
+  resumeUrl        String?
+  sourceEmailId    String?
+  reviewFields     String[]       @default([])
+  receivedAt       DateTime       @default(now())
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+
+  applications     Application[]
+  attachments      Attachment[]
+  excelSyncRuns    ExcelSyncRun[]
+
+  @@index([email])
+  @@index([processingStatus])
+  @@index([interviewStatus])
+  @@index([receivedAt])
+  @@index([appliedRole])
+}
+
+model Application {
+  id             String     @id @default(uuid())
+  candidateId    String
+  candidate      Candidate  @relation(fields: [candidateId], references: [id], onDelete: Cascade)
+  role           String
+  sourceEmail    String     @default("")
+  status         String     @default("new") // new, under_review, shortlisted, interview, rejected, hired
+  recruiter      String?
+  submissionDate DateTime   @default(now())
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+
+  @@index([candidateId])
+  @@index([status])
+  @@index([role])
+}
+
+model ProcessingJob {
+  id          String        @id @default(uuid())
+  type        String        // email_ingest, attachment_parse, ocr, field_extraction, excel_sync
+  related     String        // e.g. email ID or candidate ID or filename
+  status      String        @default("queued") // queued, processing, succeeded, retrying, failed, cancelled
+  attempts    Int           @default(0)
+  startedAt   DateTime?
+  completedAt DateTime?
+  lastError   String?
+  nextRetryAt DateTime?
+  emailId     String?       @unique
+  email       EmailMessage? @relation(fields: [emailId], references: [id], onDelete: Cascade)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  @@index([type])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model ExcelSyncRun {
+  id          String     @id @default(uuid())
+  candidateId String?
+  candidate   Candidate? @relation(fields: [candidateId], references: [id], onDelete: Cascade)
+  status      String     @default("pending") // pending, success, failed
+  result      String     @default("success") // success, partial, failed
+  rows        Int        @default(1)
+  message     String     @default("")
+  attempts    Int        @default(0)
+  lastError   String?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  @@index([candidateId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model AuditLog {
+  id        String   @id @default(uuid())
+  actor     String   @default("system")
+  action    String
+  related   String   @default("")
+  result    String   @default("info") // success, failure, info
+  requestId String   @default("")
+  entity    String   @default("")
+  entityId  String?
+  payload   Json?
+  createdAt DateTime @default(now())
+
+  @@index([action])
+  @@index([actor])
+  @@index([result])
+  @@index([createdAt])
+}
+
+model OAuthState {
+  id           String   @id @default(uuid())
+  state        String   @unique
+  codeVerifier String
+  expiresAt    DateTime
+  createdAt    DateTime @default(now())
+
+  @@index([expiresAt])
+}
+
+model ExcelWorkbook {
+  id          String   @id @default(uuid())
+  driveItemId String   @unique               // Graph driveItem ID
+  webUrl      String   // OneDrive web URL to open the workbook
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}

@@ -63,7 +63,7 @@ export interface Candidate {
 }
 
 export interface CandidateDetail extends Candidate {
-  sourceEmail: { from: string; subject: string; receivedAt: ISODate; messageId: string } | null;
+  sourceEmail: { from: string; subject: string; receivedAt: ISODate; messageId: string; bodyText?: string | null; } | null;
   applications: Application[];
   processingHistory: { at: ISODate; step: string; status: JobStatus; message?: string }[];
   audit: AuditLog[];
@@ -183,3 +183,4 @@ export interface HealthStatus {
   status: "ok" | "degraded";
   version?: string;
 }
+

@@ -86,8 +86,8 @@ export function Panel({ title, description, actions, children, className = "" }:
 export function Field({ label, children }: { label: string; children: ReactNode }) {
   return (
     <div className="flex items-start justify-between gap-4 py-2 text-sm">
-      <dt className="text-muted-foreground">{label}</dt>
-      <dd className="text-right font-medium">{children ?? <Unknown />}</dd>
+      <dt className="shrink-0 text-muted-foreground">{label}</dt>
+      <dd className="min-w-0 text-right font-medium break-words">{children ?? <Unknown />}</dd>
     </div>
   );
 }

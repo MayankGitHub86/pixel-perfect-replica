@@ -1,0 +1,8 @@
+model ExcelWorkbook {
+  id          String   @id @default(uuid())
+  driveItemId String   @unique               // Graph driveItem ID
+  webUrl      String   // OneDrive web URL to open the workbook
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+

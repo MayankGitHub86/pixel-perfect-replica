@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowLeft, FileText, Pencil } from "lucide-react";
+import { ArrowLeft, Download, FileText, Pencil } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ErrorState, Field, LoadingRows, Panel, Unknown } from "@/components/app/states";
@@ -7,6 +7,7 @@ import { SampleTag, StatusBadge } from "@/components/app/status-badge";
 import { fmtDate } from "@/components/app/table-kit";
 import { CandidateEditDialog } from "@/components/app/candidate-edit-dialog";
 import { useCandidate } from "@/hooks/use-api";
+import { API_BASE_URL } from "@/lib/api/client";
 import type { Candidate } from "@/lib/api/types";
 
 export const Route = createFileRoute("/candidates/$id")({
@@ -66,12 +67,26 @@ function CandidateDetailPage() {
             </Panel>
             <div className="space-y-4">
               <Panel title="Resume">
-                <div className="flex items-center gap-3 p-4 text-sm">
-                  <FileText className="size-8 text-muted-foreground" />
-                  <div className="min-w-0">
-                    <p className="truncate font-medium">{c.resumeFileName ?? "No file"}</p>
-                    <p className="font-mono text-xs text-muted-foreground">ref: {c.resumeRef ?? "—"}</p>
+                <div className="flex items-center justify-between gap-3 p-4 text-sm">
+                  <div className="flex items-center gap-3 min-w-0">
+                    <FileText className="size-8 text-muted-foreground shrink-0" />
+                    <div className="min-w-0">
+                      <p className="truncate font-medium">{c.resumeFileName ?? "No file"}</p>
+                      <p className="text-xs text-muted-foreground">{c.resumeRef ? "Verified document" : "Not provided"}</p>
+                    </div>
                   </div>
+                  {c.resumeRef && (
+                    <Button size="sm" variant="outline" asChild>
+                      <a
+                        href={`${API_BASE_URL}/api/candidates/${encodeURIComponent(c.id)}/resume`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        download={c.resumeFileName ?? "resume.docx"}
+                      >
+                        <Download className="mr-1.5 size-4" /> Download CV
+                      </a>
+                    </Button>
+                  )}
                 </div>
                 <p className="border-t px-4 py-2 text-xs text-muted-foreground">Files are served only through authorized, short-lived backend downloads — never public URLs.</p>
               </Panel>
@@ -80,8 +95,22 @@ function CandidateDetailPage() {
                   <Field label="From">{c.sourceEmail?.from}</Field>
                   <Field label="Subject">{c.sourceEmail?.subject}</Field>
                   <Field label="Received">{c.sourceEmail ? fmtDate(c.sourceEmail.receivedAt, true) : null}</Field>
-                  <Field label="Message">{c.sourceEmail ? <span className="font-mono text-xs">{c.sourceEmail.messageId}</span> : null}</Field>
+                  <Field label="Status">{c.sourceEmail ? <StatusBadge status="processed" /> : null}</Field>
                 </dl>
+                {c.sourceEmail ? (
+                  <div className="border-t p-4">
+                    <p className="text-xs font-medium text-muted-foreground mb-1.5">Message Content</p>
+                    {c.sourceEmail.bodyText ? (
+                      <div className="rounded-md border bg-muted/30 p-3 text-xs leading-relaxed whitespace-pre-wrap break-words max-h-48 overflow-y-auto">
+                        {c.sourceEmail.bodyText}
+                      </div>
+                    ) : (
+                      <p className="text-xs text-muted-foreground italic">No text content in source email.</p>
+                    )}
+                  </div>
+                ) : (
+                  <p className="border-t p-4 text-xs text-muted-foreground italic">No source email recorded.</p>
+                )}
               </Panel>
             </div>
             <Panel title="Applications">
